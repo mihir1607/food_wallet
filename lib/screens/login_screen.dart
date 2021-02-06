@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+
+import './hotel_index.dart';
 import 'package:http/http.dart' as http;
 
 import '../providers/user.dart';
@@ -56,14 +58,24 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     });
     http
         .post(
-          url + '/login',
-          headers: {
-            'content-type': 'application/json',
-          },
-          body: response,
-        )
-        .then((value) => print(json.decode(value.body)));
-    print(response);
+      url + '/login',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: response,
+    )
+        .then((value) {
+      // print(json.decode[token]);
+      print(json.decode((value.body)));
+      print(json.decode('${value.statusCode}'));
+      if (json.decode(value.body)) {
+        Navigator.of(context).pushNamed(HotelIndex.routeName);
+      }
+    });
+    // print(response);
+    // if (response == "Login Successful ") {
+    //   Navigator.of(context).pushNamed(HotelIndex.routeName);
+    // }
     // print(newUser.email);
     // print(newUser.password);
     // print(newUser.username);
