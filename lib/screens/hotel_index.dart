@@ -11,15 +11,24 @@ class HotelIndex extends StatefulWidget {
 
 class _HotelIndexState extends State<HotelIndex> {
   var _isInit = true;
+  var _isLoading = false;
 
   @override
   void initState() {
     super.initState();
   }
 
+  @override
   void didChangeDependencies() {
     if (_isInit) {
-      Provider.of<HotelList>(context).fetchProducts();
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<HotelList>(context).fetchProducts().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -30,6 +39,11 @@ class _HotelIndexState extends State<HotelIndex> {
       appBar: AppBar(
         title: Text('Hotels'),
       ),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : null,
     );
   }
 }
